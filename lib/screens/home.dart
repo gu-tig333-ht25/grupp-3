@@ -75,19 +75,38 @@ class _HomeScreenState extends State<HomeScreen> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.amber,
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: Stack(
+              children: [
+                Icon(Icons.home, color: Colors.amber),
+                Icon(Icons.home_outlined),
+              ],
+            ),
             icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.favorite_border),
+            selectedIcon: Stack(
+              children: [
+                Icon(Icons.favorite, color: Colors.red),
+                Icon(Icons.favorite_outline),
+              ],
+            ),
+            icon: Icon(Icons.favorite_outline),
             label: 'Favoriter',
           ),
-          NavigationDestination(icon: Icon(Icons.person), label: 'Profil'),
+          NavigationDestination(
+            selectedIcon: Stack(
+              children: [
+                Icon(Icons.person, color: Colors.amber),
+                Icon(Icons.person_outline),
+              ],
+            ),
+            icon: Icon(Icons.person_outline),
+            label: 'Profil',
+          ),
         ],
       ),
     );
