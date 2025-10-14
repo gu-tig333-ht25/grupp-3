@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:template/screens/pristrend.dart';
 import 'package:template/screens/profil.dart';
 import 'package:template/screens/ranta.dart';
+import 'package:template/widgets/NavigationBar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -69,46 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Stack(
-              children: [
-                Icon(Icons.home, color: Colors.amber),
-                Icon(Icons.home_outlined),
-              ],
-            ),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            selectedIcon: Stack(
-              children: [
-                Icon(Icons.favorite, color: Colors.red),
-                Icon(Icons.favorite_outline),
-              ],
-            ),
-            icon: Icon(Icons.favorite_outline),
-            label: 'Favoriter',
-          ),
-          NavigationDestination(
-            selectedIcon: Stack(
-              children: [
-                Icon(Icons.person, color: Colors.amber),
-                Icon(Icons.person_outline),
-              ],
-            ),
-            icon: Icon(Icons.person_outline),
-            label: 'Profil',
-          ),
-        ],
-      ),
+      bottomNavigationBar: Navbar(currentPageIndex: 0),
     );
   }
 }
