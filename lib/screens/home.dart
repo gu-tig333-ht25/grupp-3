@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:template/screens/pristrend.dart';
 import 'package:template/screens/profil.dart';
 import 'package:template/screens/ranta.dart';
-import 'package:template/widgets/NavigationBar.dart';
+import 'package:template/widgets/hem/kpi_card.dart';
+import 'package:template/widgets/navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,11 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Padding(padding: const EdgeInsets.all(16.0)),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OutlinedButton(
+              padding: const EdgeInsets.all(16.0),
+              child: KpiCard(
                 onPressed: () => {
                   Navigator.push(
                     context,
@@ -36,12 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 },
-                child: Text('Ränta'),
+                title: "Styrränta",
+                value: 1.75,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OutlinedButton(
+              padding: const EdgeInsets.all(16.0),
+              child: KpiCard(
+                title: "Pristrend 12 månader",
+                value: -2.1,
                 onPressed: () => {
                   Navigator.push(
                     context,
@@ -50,9 +54,53 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 },
-                child: Text('Pristrend'),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () => {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF597FD0),
+                  foregroundColor: Colors.white, // Text color
+                  padding: const EdgeInsets.all(8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    "Bolånekalkyl",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineSmall!.copyWith(color: Colors.white),
+                  ),
+                ),
+
+                // textColor: Colors.white,
+                // color: Colors.blue,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                "Nyheter",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                width: double.infinity, // makes it expand to maximum width
+                height: 100, // adjust as needed
+                decoration: BoxDecoration(
+                  color: Colors.grey[300], // light grey background
+                  borderRadius: BorderRadius.circular(12), // rounded corners
+                ),
+              ),
+            ),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: OutlinedButton(
