@@ -25,7 +25,7 @@ class Navbar extends StatelessWidget {
             );
             break;
           case 1: // Favoriter
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (BuildContext context) => Favoriter()),
             );
