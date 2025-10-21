@@ -13,6 +13,15 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
+  // Helper-funktion för att returnera korrekt ImageProvider
+  ImageProvider getProfileImage(String? photoUrl) {
+    if (photoUrl != null && photoUrl.startsWith('http')) {
+      return NetworkImage(photoUrl);
+    } else {
+      return const AssetImage('assets/default_profile.png');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -28,10 +37,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
         child: Column(
           children: [
             if (user != null) ...[
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 40,
-                backgroundColor: Color(0xFFDEE1FF),
-                backgroundImage: AssetImage('assets/default_profile.png'),
+                backgroundColor: const Color(0xFFDEE1FF),
+                backgroundImage: getProfileImage(user.photoURL),
               ),
               const SizedBox(height: 10),
               Text(

@@ -32,29 +32,26 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         const String onlineImage =
             'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-        const String localAsset = 'assets/default_profile.png';
 
         bool canLoadNetworkImage = false;
 
         try {
-          // Försök ladda nätbilden (testar bara om den existerar)
+          // Testar om nätbilden går att ladda
           final response =
               await NetworkAssetBundle(Uri.parse(onlineImage)).load("");
           canLoadNetworkImage = response.lengthInBytes > 0;
-        } catch (e) {
+        } catch (_) {
           canLoadNetworkImage = false;
         }
 
-        // Uppdatera photoURL baserat på resultatet
-        if (user.photoURL == null || user.photoURL!.isEmpty) {
-          await user.updatePhotoURL(
-            canLoadNetworkImage ? onlineImage : localAsset,
-          );
+        // Endast om photoURL saknas och nätbilden funkar
+        if ((user.photoURL == null || user.photoURL!.isEmpty) &&
+            canLoadNetworkImage) {
+          await user.updatePhotoURL(onlineImage);
         }
       }
 
       if (!mounted) return;
-
       Navigator.of(context).popUntil((route) => route.isFirst);
     } on FirebaseAuthException catch (e) {
       setState(() {
