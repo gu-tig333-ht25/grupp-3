@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:template/screens/pristrend.dart';
-import 'package:template/screens/profil.dart';
 import 'package:template/screens/ranta.dart';
 import 'package:template/widgets/hem/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';

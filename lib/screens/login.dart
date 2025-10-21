@@ -27,20 +27,17 @@ class _LoginScreenState extends State<LoginScreen> {
       password: _passwordController.text.trim(),
     );
 
-    
-    final user = FirebaseAuth.instance.currentUser;
+  final user = FirebaseAuth.instance.currentUser;
     if (user != null && (user.photoURL == null || user.photoURL!.isEmpty)) {
       await user.updatePhotoURL(
-  'https://cdn-icons-png.flaticon.com/512/3135/3135715.png', // webbild
-);
+        'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      );
     }
 
     if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const ProfilScreen()),
-    );
+    Navigator.of(context).popUntil((route) => route.isFirst);
+
   } on FirebaseAuthException catch (e) {
     setState(() {
       _error = e.message;
@@ -51,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 }
+
 
   @override
   Widget build(BuildContext context) {

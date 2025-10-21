@@ -1,123 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'notiser.dart';
-import 'morklage.dart';
-import 'login.dart';
+import 'package:provider/provider.dart';
+import 'package:template/providers/theme_provider.dart';
+import 'package:template/widgets/navigation_bar.dart';
+import 'package:template/screens/login.dart';
 
-class ProfilScreen extends StatelessWidget {
+class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
 
- @override
+  @override
+  State<ProfilScreen> createState() => _ProfilScreenState();
+}
+
+class _ProfilScreenState extends State<ProfilScreen> {
+  @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profil'),
+        title: const Text("Profil"),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (user != null) ...[
-              const SizedBox(height: 20),
-              CircleAvatar(
-                radius: 45,
-                backgroundImage: user.photoURL != null
-                    ? NetworkImage(user.photoURL!)
-                    : const NetworkImage(
-                        'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'),
+              const CircleAvatar(
+                radius: 40,
+                backgroundColor: Color(0xFFDEE1FF),
+                backgroundImage: AssetImage('assets/default_profile.png'),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Text(
-                'Inloggad som',
-                style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                "Inloggad som: ${user.email}",
+                style: const TextStyle(fontSize: 16),
               ),
-              Text(
-                user.email ?? '',
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 30),
             ],
-            _menuButton(
-              context,
-              icon: Icons.notifications_outlined,
-              text: 'Notiser',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const NotiserScreen()),
-                );
-              },
+
+            // Mörkt läge växling
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Mörkt läge", style: TextStyle(fontSize: 16)),
+                Switch(
+                  value: themeProvider.isDarkMode,
+                  onChanged: (value) {
+                    themeProvider.toggleTheme(value);
+                  },
+                ),
+              ],
             ),
-            _menuButton(
-              context,
-              icon: Icons.dark_mode_outlined,
-              text: 'Mörkläge',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const MorklageScreen()),
-                );
-              },
-            ),
-            _menuButton(
-              context,
-              icon: user != null
-                  ? Icons.logout_outlined
-                  : Icons.login_outlined,
-              text: user != null ? 'Logga ut' : 'Logga in',
+            const SizedBox(height: 40),
+
+            // Logga in / Logga ut knapp
+            ElevatedButton(
               onPressed: () async {
                 if (user != null) {
                   await FirebaseAuth.instance.signOut();
-                  
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ProfilScreen()),
-                  );
+                  if (!mounted) return;
+                  setState(() {}); // uppdatera vyn
                 } else {
+                  if (!mounted) return;
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
                   );
                 }
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFF3F1FC),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+              ),
+              child: Text(
+                user != null ? "Logga ut" : "Logga in",
+                style: const TextStyle(
+                  color: Color(0xFF444444),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _menuButton(
-    BuildContext context, {
-    required IconData icon,
-    required String text,
-    required VoidCallback onPressed,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: OutlinedButton.icon(
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(color: Theme.of(context).colorScheme.primary),
-          minimumSize: const Size(double.infinity, 55),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        icon: Icon(icon, color: Theme.of(context).colorScheme.primary),
-        label: Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        onPressed: onPressed,
-      ),
+      bottomNavigationBar: Navbar(currentPageIndex: 2),
     );
   }
 }
