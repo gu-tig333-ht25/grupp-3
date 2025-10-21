@@ -100,21 +100,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OutlinedButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => ProfilScreen(),
-                    ),
-                  ),
-                },
-                child: Text('Profil'),
-              ),
-            ),
           ],
         ),
       ),
