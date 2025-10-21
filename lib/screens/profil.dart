@@ -5,15 +5,10 @@ import 'package:template/providers/theme_provider.dart';
 import 'package:template/widgets/navigation_bar.dart';
 import 'package:template/screens/login.dart';
 
-class ProfilScreen extends StatefulWidget {
+class ProfilScreen extends StatelessWidget {
   const ProfilScreen({super.key});
 
-  @override
-  State<ProfilScreen> createState() => _ProfilScreenState();
-}
-
-class _ProfilScreenState extends State<ProfilScreen> {
-  @override
+ @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final themeProvider = Provider.of<ThemeProvider>(context);
