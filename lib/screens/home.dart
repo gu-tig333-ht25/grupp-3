@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:template/screens/pristrend.dart';
+import 'package:template/screens/pristrend_screen/pristrend_main.dart';
 import 'package:template/screens/profil.dart';
 import 'package:template/screens/ranta.dart';
 
