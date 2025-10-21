@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:template/apis/news_api.dart';
 import 'package:template/screens/pristrend.dart';
 import 'package:template/screens/ranta.dart';
 import 'package:template/widgets/hem/kpi_card.dart';
