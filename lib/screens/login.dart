@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:template/screens/profil.dart';
+import 'package:flutter/services.dart' show NetworkAssetBundle;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,39 +16,56 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _error;
 
   Future<void> _login() async {
-  setState(() {
-    _loading = true;
-    _error = null;
-  });
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
 
-  try {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-
-  final user = FirebaseAuth.instance.currentUser;
-    if (user != null && (user.photoURL == null || user.photoURL!.isEmpty)) {
-      await user.updatePhotoURL(
-        'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
       );
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        const String onlineImage =
+            'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+        const String localAsset = 'assets/default_profile.png';
+
+        bool canLoadNetworkImage = false;
+
+        try {
+          // Försök ladda nätbilden (testar bara om den existerar)
+          final response =
+              await NetworkAssetBundle(Uri.parse(onlineImage)).load("");
+          canLoadNetworkImage = response.lengthInBytes > 0;
+        } catch (e) {
+          canLoadNetworkImage = false;
+        }
+
+        // Uppdatera photoURL baserat på resultatet
+        if (user.photoURL == null || user.photoURL!.isEmpty) {
+          await user.updatePhotoURL(
+            canLoadNetworkImage ? onlineImage : localAsset,
+          );
+        }
+      }
+
+      if (!mounted) return;
+
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _error = e.message;
+      });
+    } finally {
+      setState(() {
+        _loading = false;
+      });
     }
-
-    if (!mounted) return;
-
-    Navigator.of(context).popUntil((route) => route.isFirst);
-
-  } on FirebaseAuthException catch (e) {
-    setState(() {
-      _error = e.message;
-    });
-  } finally {
-    setState(() {
-      _loading = false;
-    });
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
