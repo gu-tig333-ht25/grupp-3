@@ -1,23 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:template/screens/home.dart';
+
+// Uppdatera vägarna nedan så de matchar din struktur
+import 'screens/home.dart'; // din startsida med knappar
+import 'screens/ranta.dart'; // ränta-sidan
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Bostadskollen',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
+        colorSchemeSeed: const Color(0xFF0A5C7A),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(), // ← tillbaka till din ursprungliga startsida
+      routes: {
+        '/ranta': (_) => const RantaScreen(), // valfritt: named route
+      },
     );
   }
 }
