@@ -9,7 +9,8 @@ import 'package:template/screens/home.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_state.dart';
-
+import 'screens/home.dart';
+import 'screens/ranta.dart';
   
 
 void main() async {
