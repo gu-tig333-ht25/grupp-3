@@ -3,6 +3,7 @@ import 'package:template/screens/pristrend.dart';
 import 'package:template/screens/ranta.dart';
 import 'package:template/widgets/hem/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';
+import 'package:template/widgets/news/news_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Bostadskollen'),
         centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Padding(padding: const EdgeInsets.all(16.0)),
@@ -80,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // color: Colors.blue,
               ),
             ),
+
             Padding(
               padding: EdgeInsets.all(16),
               child: Text(
@@ -88,17 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                width: double.infinity, // makes it expand to maximum width
-                height: 100, // adjust as needed
-                decoration: BoxDecoration(
-                  color: Colors.grey[300], // light grey background
-                  borderRadius: BorderRadius.circular(12), // rounded corners
-                ),
-              ),
-            ),
+            NewsCard(),
           ],
         ),
       ),

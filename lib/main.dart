@@ -4,10 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:template/firebase_options.dart';
 import 'package:template/providers/theme_provider.dart';
+import 'package:template/providers/news_provider.dart';
 import 'package:template/screens/home.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+
+  
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -29,7 +35,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NewsProvider()..loadNews()),
+      ],
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Bostadskollen',
       themeMode: themeProvider.themeMode,
@@ -68,7 +78,7 @@ class MyApp extends StatelessWidget {
   },
 ),
     );
-  }
+  }),
 }
 
 
