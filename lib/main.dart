@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:template/screens/home.dart';
+import 'package:provider/provider.dart';
+import 'package:template/screens/pristrend_screen/pristrend_state.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_) => ChartProvider(), child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
