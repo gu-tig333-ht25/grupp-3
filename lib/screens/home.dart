@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:template/screens/pristrend.dart';
 import 'package:template/screens/profil.dart';
 import 'package:template/screens/ranta.dart';
-import 'package:template/widgets/NavigationBar.dart';
+import 'package:template/widgets/navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

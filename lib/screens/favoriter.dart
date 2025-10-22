@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:template/widgets/navigationbar.dart';
+import 'package:template/widgets/navigation_bar.dart';
 
 class Favoriter extends StatelessWidget {
   const Favoriter({super.key});
