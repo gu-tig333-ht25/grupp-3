@@ -7,7 +7,8 @@ import 'package:template/providers/theme_provider.dart';
 import 'package:template/providers/news_provider.dart';
 import 'package:template/screens/home.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'package:provider/provider.dart';
+import 'package:template/screens/pristrend_screen/pristrend_state.dart';
 
   
 
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NewsProvider()..loadNews()),
+        ChangeNotifierProvider(create: (_) => ChartProvider(), child: MyApp()),
       ],
       child: MaterialApp(
       debugShowCheckedModeBanner: false,
