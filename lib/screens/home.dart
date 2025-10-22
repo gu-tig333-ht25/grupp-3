@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:template/screens/pristrend.dart';
+import 'package:template/screens/pristrend_screen/pristrend_main.dart';
 import 'package:template/screens/profil.dart';
 import 'package:template/screens/ranta.dart';
+import 'package:template/widgets/hem/kpi_card.dart';
+import 'package:template/widgets/navigation_bar.dart';
+import 'package:template/widgets/news/news_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,13 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text('Bostadskollen'),
         centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Padding(padding: const EdgeInsets.all(16.0)),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OutlinedButton(
+              padding: const EdgeInsets.all(16.0),
+              child: KpiCard(
                 onPressed: () => {
                   Navigator.push(
                     context,
@@ -35,12 +39,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 },
-                child: Text('Ränta'),
+                title: "Styrränta",
+                value: 1.75,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OutlinedButton(
+              padding: const EdgeInsets.all(16.0),
+              child: KpiCard(
+                title: "Pristrend 12 månader",
+                value: -2.1,
                 onPressed: () => {
                   Navigator.push(
                     context,
@@ -49,66 +56,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 },
-                child: Text('Pristrend'),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: OutlinedButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => ProfilScreen(),
-                    ),
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () => {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF597FD0),
+                  foregroundColor: Colors.white, // Text color
+                  padding: const EdgeInsets.all(8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                },
-                child: Text('Profil'),
+                ),
+                child: Center(
+                  child: Text(
+                    "Bolånekalkyl",
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineSmall!.copyWith(color: Colors.white),
+                  ),
+                ),
+
+                // textColor: Colors.white,
+                // color: Colors.blue,
               ),
             ),
+
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                "Nyheter",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+
+            NewsCard(),
           ],
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            selectedIcon: Stack(
-              children: [
-                Icon(Icons.home, color: Colors.amber),
-                Icon(Icons.home_outlined),
-              ],
-            ),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            selectedIcon: Stack(
-              children: [
-                Icon(Icons.favorite, color: Colors.red),
-                Icon(Icons.favorite_outline),
-              ],
-            ),
-            icon: Icon(Icons.favorite_outline),
-            label: 'Favoriter',
-          ),
-          NavigationDestination(
-            selectedIcon: Stack(
-              children: [
-                Icon(Icons.person, color: Colors.amber),
-                Icon(Icons.person_outline),
-              ],
-            ),
-            icon: Icon(Icons.person_outline),
-            label: 'Profil',
-          ),
-        ],
-      ),
+      bottomNavigationBar: Navbar(currentPageIndex: 0),
     );
   }
 }
