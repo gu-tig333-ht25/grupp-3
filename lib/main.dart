@@ -11,16 +11,11 @@ import 'package:provider/provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_state.dart';
 import 'screens/home.dart';
 import 'screens/ranta.dart';
-  
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
- await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     ChangeNotifierProvider(
@@ -43,47 +38,47 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChartProvider(), child: MyApp()),
       ],
       child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Bostadskollen',
-      themeMode: themeProvider.themeMode,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 0,
+        debugShowCheckedModeBanner: false,
+        title: 'Bostadskollen',
+        themeMode: themeProvider.themeMode,
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
+          useMaterial3: true,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+            elevation: 0,
+          ),
+        ),
+        darkTheme: ThemeData.dark().copyWith(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.indigoAccent,
+            brightness: Brightness.dark,
+          ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color.fromARGB(255, 24, 111, 182),
+            foregroundColor: Color.fromARGB(255, 39, 21, 141),
+          ),
+        ),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (snapshot.hasData) {
+              return const HomeScreen();
+            }
+            return const AuthGate();
+          },
         ),
       ),
-      darkTheme: ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigoAccent,
-          brightness: Brightness.dark,
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 24, 111, 182),
-          foregroundColor: Color.fromARGB(255, 39, 21, 141),
-        ),
-      ),
-      home: StreamBuilder(
-  stream: FirebaseAuth.instance.authStateChanges(),
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-    if (snapshot.hasData) {
-      return const HomeScreen();
-    }
-    return const AuthGate();
-  },
-),
     );
-  }),
+  }
 }
-
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -93,7 +88,6 @@ class AuthGate extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
