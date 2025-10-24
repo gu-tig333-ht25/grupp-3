@@ -8,13 +8,21 @@ import 'package:template/providers/news_provider.dart';
 import 'package:template/screens/home.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:template/screens/pristrend_screen/pristrend_state.dart';
+<<<<<<< HEAD
+=======
+import 'screens/home.dart';
+import 'screens/ranta.dart';
+>>>>>>> 54ea3d2eb6126c6ce14fe4873f0ca25c785e6980
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+<<<<<<< HEAD
 
   //await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+=======
+>>>>>>> 54ea3d2eb6126c6ce14fe4873f0ca25c785e6980
 
   runApp(
     ChangeNotifierProvider(
