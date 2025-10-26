@@ -11,7 +11,6 @@ class RantaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Skapa en lokal provider för just denna sida
     return Consumer<RantaState>(
       builder: (context, s, _) {
         final titleStyle = Theme.of(
