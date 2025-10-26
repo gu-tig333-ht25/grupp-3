@@ -19,11 +19,12 @@ class Navbar extends StatelessWidget {
         }
         switch (index) {
           case 0: // Home Screen
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) => HomeScreen(),
               ),
+              (Route<dynamic> route) => false,
             );
             break;
           case 1: // Favoriter
