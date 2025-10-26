@@ -19,10 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Bostadskollen'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text('Bostadskollen'), centerTitle: true),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -55,31 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () => {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF597FD0),
-                  foregroundColor: Colors.white, // Text color
-                  padding: const EdgeInsets.all(8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    "Bolånekalkyl",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineSmall!.copyWith(color: Colors.white),
-                  ),
-                ),
-
-                // textColor: Colors.white,
-                // color: Colors.blue,
               ),
             ),
 
