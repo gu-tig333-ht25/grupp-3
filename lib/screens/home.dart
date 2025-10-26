@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_main.dart';
-import 'package:template/screens/profil.dart';
+import 'package:template/screens/pristrend_screen/pristrend_state.dart';
 import 'package:template/screens/ranta.dart';
+import 'package:template/state/ranta_state.dart';
 import 'package:template/widgets/hem/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';
 import 'package:template/widgets/news/news_card.dart';
@@ -14,10 +16,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentPageIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+    final rantaProvider = context.watch<RantaState>();
+    final pristrendProvider = context.watch<ChartProvider>();
+
     return Scaffold(
       appBar: AppBar(title: Text('Bostadskollen'), centerTitle: true),
       body: SingleChildScrollView(
@@ -36,14 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 },
                 title: "Styrränta",
-                value: 1.75,
+                value: rantaProvider.current,
+                loading: rantaProvider.loading,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: KpiCard(
                 title: "Pristrend 12 månader",
-                value: -2.1,
                 onPressed: () => {
                   Navigator.push(
                     context,
@@ -52,6 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 },
+                value: pristrendProvider.pristrend,
+                loading: pristrendProvider.isLoading,
               ),
             ),
 

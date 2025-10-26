@@ -19,11 +19,18 @@ class ChartProvider extends ChangeNotifier {
   String? selectedRegionName;
   String? selectedQuarter;
 
+  // Pristrend
+  double? _pristrend;
+
   List<String> get latest10Quarters {
     if (selectedQuarter == null || tidsperioder.isEmpty) return [];
     final index = tidsperioder.indexOf(selectedQuarter!);
     final start = index - 9 < 0 ? 0 : index - 9;
     return tidsperioder.sublist(start, index + 1);
+  }
+
+  double? get pristrend {
+    return _pristrend;
   }
 
   bool isLoading = false;
@@ -45,6 +52,7 @@ class ChartProvider extends ChangeNotifier {
       selectedQuarter ??= tidsperioder.last;
 
       await fetchChartData();
+      await fetchChartData(fetchKPI: true);
     }
   }
 
@@ -129,16 +137,30 @@ class ChartProvider extends ChangeNotifier {
   }
 
   // Hämtar grafdata baserat på vald region och kvartal
-  Future<void> fetchChartData() async {
-    if (selectedRegionCode == null || tidsperioder.isEmpty) return;
+  Future<void> fetchChartData({bool fetchKPI = false}) async {
+    String filter = "vs:RegionRiket99";
+
+    if (!fetchKPI) {
+      if (selectedRegionCode == null || tidsperioder.isEmpty) {
+        return;
+      } else if (selectedRegionCode!.compareTo("00") != 0) {
+        filter = "vs:RegionLän99EjAggr";
+      }
+    }
 
     isLoading = true;
     notifyListeners();
 
     try {
       // Hämta de 10 senaste kvartalen (failsafe om färre finns)
-      final index = tidsperioder.indexOf(selectedQuarter ?? tidsperioder.last);
-      final start = index - 9 < 0 ? 0 : index - 9;
+      int index = tidsperioder.indexOf(selectedQuarter ?? tidsperioder.last);
+      int start = index - 9 < 0 ? 0 : index - 9;
+
+      if (fetchKPI) {
+        index = tidsperioder.indexOf(tidsperioder.last);
+        start = index - 3 < 0 ? 0 : index - 3;
+      }
+
       final latest10 = tidsperioder.sublist(start, index + 1);
 
       final url = Uri.parse(
@@ -150,8 +172,8 @@ class ChartProvider extends ChangeNotifier {
           {
             "code": "Region",
             "selection": {
-              "filter": "vs:RegionLän99EjAggr",
-              "values": [selectedRegionCode],
+              "filter": filter,
+              "values": [fetchKPI ? "00" : selectedRegionCode],
             },
           },
           {
@@ -180,11 +202,21 @@ class ChartProvider extends ChangeNotifier {
         final values = data["data"] as List<dynamic>;
 
         // Skapa grafpunkter
-        spots = [];
-        for (int i = 0; i < values.length; i++) {
-          final raw = values[i]["values"][0];
-          final y = double.tryParse(raw) ?? 0.0;
-          spots.add(FlSpot(i.toDouble(), y));
+        if (!fetchKPI) {
+          spots = [];
+          for (int i = 0; i < values.length; i++) {
+            final raw = values[i]["values"][0];
+            final y = double.tryParse(raw) ?? 0.0;
+            spots.add(FlSpot(i.toDouble(), y));
+          }
+        } else {
+          List<FlSpot> tempList = [];
+          for (int i = 0; i < values.length; i++) {
+            final raw = values[i]["values"][0];
+            final y = double.tryParse(raw) ?? 0.0;
+            tempList.add(FlSpot(i.toDouble(), y));
+          }
+          _pristrend = (tempList.last.y / tempList.first.y) - 1;
         }
       }
     } catch (e) {

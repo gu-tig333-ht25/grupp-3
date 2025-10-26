@@ -12,151 +12,146 @@ class RantaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Skapa en lokal provider för just denna sida
-    return ChangeNotifierProvider(
-      create: (_) => RantaState()..load(),
-      child: Consumer<RantaState>(
-        builder: (context, s, _) {
-          final titleStyle = Theme.of(
-            context,
-          ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600);
+    return Consumer<RantaState>(
+      builder: (context, s, _) {
+        final titleStyle = Theme.of(
+          context,
+        ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600);
 
-          return Scaffold(
-            appBar: AppBar(title: const Text("Ränta")),
-            body: SafeArea(
-              child: s.loading
-                  ? const Center(child: CircularProgressIndicator())
-                  : s.error != null
-                  ? _ErrorView(
-                      message:
-                          "Kunde inte hämta räntedata.\n${s.error}\n\nKontrollera API-nyckel/endpoint.",
-                      onRetry: () => s.load(),
-                    )
-                  : SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            s.current != null ? s.fmtPct(s.current!) : "–",
-                            style: titleStyle,
+        return Scaffold(
+          appBar: AppBar(title: const Text("Ränta")),
+          body: SafeArea(
+            child: s.loading
+                ? const Center(child: CircularProgressIndicator())
+                : s.error != null
+                ? _ErrorView(
+                    message:
+                        "Kunde inte hämta räntedata.\n${s.error}\n\nKontrollera API-nyckel/endpoint.",
+                    onRetry: () => s.load(),
+                  )
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          s.current != null ? s.fmtPct(s.current!) : "–",
+                          style: titleStyle,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          s.delta != null ? s.fmtDelta(s.delta!) : "–",
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: Colors.grey[600]),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Graf
+                        Container(
+                          height: 220,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 8, 39, 59),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            s.delta != null ? s.fmtDelta(s.delta!) : "–",
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(color: Colors.grey[600]),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 8,
                           ),
-                          const SizedBox(height: 16),
+                          child: s.view.isEmpty
+                              ? const Center(child: Text("Ingen data"))
+                              : LineChart(_chartData(context, s)),
+                        ),
 
-                          // Graf
-                          Container(
-                            height: 220,
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 8, 39, 59),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 8,
-                            ),
-                            child: s.view.isEmpty
-                                ? const Center(child: Text("Ingen data"))
-                                : LineChart(_chartData(context, s)),
-                          ),
+                        const SizedBox(height: 12),
 
-                          const SizedBox(height: 12),
-
-                          // Kalender + dropdowns
-                          Row(
-                            children: [
-                              // Kalenderikon (ikon-only)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8.0,
-                                  top: 20.0,
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: s.hasCustomRange
-                                        ? Theme.of(context).colorScheme.primary
-                                              .withOpacity(0.12)
-                                        : Theme.of(context).colorScheme.surface,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: Colors.black.withOpacity(0.12),
-                                    ),
+                        // Kalender + dropdowns
+                        Row(
+                          children: [
+                            // Kalenderikon (ikon-only)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: 8.0,
+                                top: 20.0,
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: s.hasCustomRange
+                                      ? Theme.of(
+                                          context,
+                                        ).colorScheme.primary.withOpacity(0.12)
+                                      : Theme.of(context).colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.black.withOpacity(0.12),
                                   ),
-                                  child: IconButton(
-                                    onPressed: () => s.pickCustomRange(context),
-                                    onLongPress: () => s.clearCustomRange(),
-                                    icon: const Icon(
-                                      Icons.calendar_today_rounded,
-                                      size: 18,
-                                    ),
-                                    tooltip: s.hasCustomRange
-                                        ? '${s.rangeLabel()}\n(Long press to clear)'
-                                        : 'Choose date range',
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                    padding: const EdgeInsets.all(10),
-                                    constraints: const BoxConstraints(
-                                      minWidth: 40,
-                                      minHeight: 40,
-                                    ),
+                                ),
+                                child: IconButton(
+                                  onPressed: () => s.pickCustomRange(context),
+                                  onLongPress: () => s.clearCustomRange(),
+                                  icon: const Icon(
+                                    Icons.calendar_today_rounded,
+                                    size: 18,
+                                  ),
+                                  tooltip: s.hasCustomRange
+                                      ? '${s.rangeLabel()}\n(Long press to clear)'
+                                      : 'Choose date range',
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                  padding: const EdgeInsets.all(10),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 40,
+                                    minHeight: 40,
                                   ),
                                 ),
                               ),
+                            ),
 
-                              // Timespan
-                              Expanded(
-                                child: _RangeDropdown(
-                                  label: "Timespan",
-                                  values: const [
-                                    "6 months",
-                                    "1 year",
-                                    "2 years",
-                                    "3 years",
-                                    "5 years",
-                                    "10 years",
-                                  ],
-                                  value: s.range,
-                                  onChanged: (v) {
-                                    if (v == null) return;
-                                    s.setRange(v);
-                                  },
-                                ),
+                            // Timespan
+                            Expanded(
+                              child: _RangeDropdown(
+                                label: "Timespan",
+                                values: const [
+                                  "6 months",
+                                  "1 year",
+                                  "2 years",
+                                  "3 years",
+                                  "5 years",
+                                  "10 years",
+                                ],
+                                value: s.range,
+                                onChanged: (v) {
+                                  if (v == null) return;
+                                  s.setRange(v);
+                                },
                               ),
-                              const SizedBox(width: 12),
+                            ),
+                            const SizedBox(width: 12),
 
-                              // Show (aggregation)
-                              Expanded(
-                                child: _RangeDropdown(
-                                  label: "Show",
-                                  values: const [
-                                    "Monthly average",
-                                    "End of month",
-                                  ],
-                                  value: s.agg,
-                                  onChanged: (v) {
-                                    if (v == null) return;
-                                    s.setAgg(v);
-                                  },
-                                ),
+                            // Show (aggregation)
+                            Expanded(
+                              child: _RangeDropdown(
+                                label: "Show",
+                                values: const [
+                                  "Monthly average",
+                                  "End of month",
+                                ],
+                                value: s.agg,
+                                onChanged: (v) {
+                                  if (v == null) return;
+                                  s.setAgg(v);
+                                },
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-            ),
-            bottomNavigationBar: Navbar(
-              currentPageIndex: 0,
-              showSelected: false,
-            ),
-          );
-        },
-      ),
+                  ),
+          ),
+          bottomNavigationBar: Navbar(currentPageIndex: 0, showSelected: false),
+        );
+      },
     );
   }
 }
