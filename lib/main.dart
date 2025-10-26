@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:template/firebase_options.dart';
 import 'package:template/providers/theme_provider.dart';
@@ -10,12 +11,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:template/screens/pristrend_screen/pristrend_state.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   //await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
+    FlutterNativeSplash.remove();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NewsProvider()..loadNews()),
