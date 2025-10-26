@@ -45,10 +45,17 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
           useMaterial3: true,
           appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.black,
+            backgroundColor: Color(0xFF597FD0),
+            foregroundColor: Colors.white,
             elevation: 0,
+            
           ),
+        textTheme: const TextTheme(
+            headlineSmall: TextStyle(color: Colors.black,),
+            displaySmall: TextStyle(color: Colors.black),
+            headlineMedium: TextStyle(color: Colors.black),
+            bodyMedium: TextStyle(color: Colors.black),
+          ),         
         ),
         darkTheme: ThemeData.dark().copyWith(
           colorScheme: ColorScheme.fromSeed(
@@ -56,44 +63,33 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
           ),
           appBarTheme: const AppBarTheme(
-            backgroundColor: Color.fromARGB(255, 24, 111, 182),
-            foregroundColor: Color.fromARGB(255, 39, 21, 141),
+            backgroundColor: Color(0xFF597FD0),
+            foregroundColor: Colors.white,           
           ),
+        textTheme: const TextTheme(
+            headlineSmall: TextStyle(color: Colors.white),
+            displaySmall: TextStyle(color: Colors.white),
+            headlineMedium: TextStyle(color: Colors.white),
+            bodyMedium: TextStyle(color: Colors.white),
+        )   
         ),
-        home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            }
-            if (snapshot.hasData) {
-              return const HomeScreen();
-            }
-            return const AuthGate();
-          },
-        ),
+home: StreamBuilder<User?>(
+  stream: FirebaseAuth.instance.authStateChanges(),
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    if (snapshot.hasData) {
+      return const HomeScreen();
+    } else {
+      return const HomeScreen();
+    }
+  },
+),
+
       ),
-    );
-  }
-}
-
-class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-        return const HomeScreen();
-      },
     );
   }
 }
