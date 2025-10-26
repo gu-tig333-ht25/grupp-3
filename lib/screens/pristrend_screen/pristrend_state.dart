@@ -216,7 +216,7 @@ class ChartProvider extends ChangeNotifier {
             final y = double.tryParse(raw) ?? 0.0;
             tempList.add(FlSpot(i.toDouble(), y));
           }
-          _pristrend = (tempList.last.y / tempList.first.y) - 1;
+          _pristrend = ((tempList.last.y / tempList.first.y) - 1) * 100;
         }
       }
     } catch (e) {
