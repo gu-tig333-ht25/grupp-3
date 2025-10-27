@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:template/firebase_options.dart';
+import 'package:template/providers/favourites_provider.dart';
 import 'package:template/providers/theme_provider.dart';
 import 'package:template/providers/news_provider.dart';
 import 'package:template/screens/home.dart';
@@ -22,9 +23,10 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => NewsProvider()..loadNews()),
+        ChangeNotifierProvider(create: (_) => NewsProvider()),
         ChangeNotifierProvider(create: (_) => ChartProvider()),
         ChangeNotifierProvider(create: (_) => RantaState()..load()),
+        ChangeNotifierProvider(create: (_) => FavouritesProvider()),
       ],
       child: const MyApp(),
     ),
