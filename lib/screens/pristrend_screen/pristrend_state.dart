@@ -51,8 +51,8 @@ class ChartProvider extends ChangeNotifier {
       )["name"];
       selectedQuarter ??= tidsperioder.last;
 
-      await fetchChartData();
       await fetchChartData(fetchKPI: true);
+      await fetchChartData();
     }
   }
 
