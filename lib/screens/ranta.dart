@@ -78,12 +78,9 @@ class RantaScreen extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     color: s.hasCustomRange
                                         ? Theme.of(context).colorScheme.primary
-                                              .withOpacity(0.12)
                                         : Theme.of(context).colorScheme.surface,
                                     borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: Colors.black.withOpacity(0.12),
-                                    ),
+                                    border: Border.all(color: Colors.black),
                                   ),
                                   child: IconButton(
                                     onPressed: () => s.pickCustomRange(context),
@@ -221,7 +218,7 @@ LineChartData _chartData(BuildContext context, RantaState s) {
     lineBarsData: [
       LineChartBarData(
         spots: spots,
-        isCurved: true,
+        isCurved: false,
         barWidth: 2,
         color: Colors.greenAccent,
         dotData: const FlDotData(show: false),
@@ -254,7 +251,7 @@ class _RangeDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final bg = Theme.of(context).colorScheme.surface;
     final textColor = Theme.of(context).colorScheme.onSurface;
-    final menuBg = Theme.of(context).colorScheme.surfaceVariant;
+    final menuBg = Theme.of(context).colorScheme.surfaceContainerHighest;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,16 +260,13 @@ class _RangeDropdown extends StatelessWidget {
           label,
           style: Theme.of(
             context,
-          ).textTheme.labelMedium?.copyWith(color: textColor.withOpacity(0.8)),
+          ).textTheme.labelMedium?.copyWith(color: textColor),
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           isExpanded: true,
-          icon: Icon(
-            Icons.keyboard_arrow_down_rounded,
-            color: textColor.withOpacity(0.8),
-          ),
+          icon: Icon(Icons.keyboard_arrow_down_rounded, color: textColor),
           style: TextStyle(color: textColor, fontSize: 14),
           dropdownColor: menuBg,
           items: values
@@ -294,11 +288,11 @@ class _RangeDropdown extends StatelessWidget {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.black.withOpacity(0.12)),
+              borderSide: BorderSide(color: Colors.black),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.black.withOpacity(0.12)),
+              borderSide: BorderSide(color: Colors.black),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),

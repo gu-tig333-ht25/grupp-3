@@ -31,11 +31,13 @@ class PristrendGraf extends StatelessWidget {
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 28,
+                  reservedSize: 20,
                   interval: 1,
                   getTitlesWidget: (value, meta) {
                     final index = value.toInt();
-                    if (index >= 0 && index < labels.length) {
+                    if (index == 0 ||
+                        index == labels.length - 1 ||
+                        index % 5 == 0) {
                       return Text(
                         labels[index],
                         style: const TextStyle(fontSize: 10),
@@ -49,8 +51,24 @@ class PristrendGraf extends StatelessWidget {
               leftTitles: const AxisTitles(
                 sideTitles: SideTitles(showTitles: false),
               ),
-              rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 28,
+                  interval: 1,
+                  getTitlesWidget: (value, meta) {
+                    final index = value.toInt();
+                    if (index == meta.min || index == meta.max) {
+                      // visa min och maxvärde
+                      return Text(
+                        index.toString(),
+                        style: const TextStyle(fontSize: 10),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
               ),
               topTitles: const AxisTitles(
                 sideTitles: SideTitles(showTitles: false),

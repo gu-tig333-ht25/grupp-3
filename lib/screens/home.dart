@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_main.dart';
-import 'package:template/screens/profil.dart';
 import 'package:template/screens/ranta.dart';
 import 'package:template/widgets/hem/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';
 import 'package:template/widgets/news/news_card.dart';
+import 'package:template/screens/pristrend_screen/pristrend_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -45,16 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: KpiCard(
-                title: "Pristrend 12 månader",
-                value: -2.1,
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => PristrendScreen(),
-                    ),
-                  ),
+              child: Consumer<ChartProvider>(
+                builder: (context, chartProvider, child) {
+                  final regionName =
+                      chartProvider.selectedRegionName ?? "Region";
+                  return KpiCard(
+                    title: "Pristrend $regionName",
+                    value: chartProvider.totalChangePercent,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const PristrendScreen(),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),

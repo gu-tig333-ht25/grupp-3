@@ -14,7 +14,7 @@ class SaveSearchButton extends StatelessWidget {
           padding: const EdgeInsets.all(16),
         ),
         onPressed: () {
-          print("Knappen tryckt!");
+          debugPrint("Knappen tryckt!");
         },
         child: const Text(
           "Spara sökning",
