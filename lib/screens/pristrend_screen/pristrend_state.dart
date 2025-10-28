@@ -138,14 +138,23 @@ class ChartProvider extends ChangeNotifier {
 
   // Hämtar grafdata baserat på vald region och kvartal
   Future<void> fetchChartData({bool fetchKPI = false}) async {
-    String filter = "vs:RegionRiket99";
+    // Län
+    String filter = "vs:RegionLän99EjAggr";
 
     if (!fetchKPI) {
       if (selectedRegionCode == null || tidsperioder.isEmpty) {
         return;
-      } else if (selectedRegionCode!.compareTo("00") != 0) {
-        filter = "vs:RegionLän99EjAggr";
       }
+    }
+
+    // Riksområde
+    if (selectedRegionCode!.startsWith("00") ||
+        selectedRegionCode!.startsWith("RIKS")) {
+      filter = "vs:Region99Riks11v";
+    }
+    //Riket
+    if (selectedRegionCode!.compareTo("00") == 0 || fetchKPI) {
+      filter = "vs:RegionRiket99";
     }
 
     isLoading = true;
