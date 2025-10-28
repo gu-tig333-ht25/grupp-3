@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_main.dart';
 import 'package:template/screens/pristrend_screen/pristrend_state.dart';
@@ -21,8 +22,29 @@ class _HomeScreenState extends State<HomeScreen> {
     final rantaProvider = context.watch<RantaState>();
     final pristrendProvider = context.watch<ChartProvider>();
 
+    FlutterNativeSplash.remove();
+
     return Scaffold(
-      appBar: AppBar(title: Text('Bostadskollen'), centerTitle: true),
+      appBar: AppBar(
+        title: Text('Bostadskollen'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => {
+              showLicensePage(
+                context: context,
+                applicationIcon: Image.asset(
+                  'assets/icons/app_icon.png',
+                  width: 52,
+                  height: 52,
+                ),
+                // applicationName: "Bostadskollen",
+              ),
+            },
+            icon: Icon(Icons.info_outlined),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[

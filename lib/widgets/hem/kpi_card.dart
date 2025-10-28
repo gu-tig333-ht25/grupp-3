@@ -12,7 +12,7 @@ class KpiCard extends StatelessWidget {
     required this.title,
     double? value,
     required this.onPressed,
-    required this.loading,
+    this.loading = false,
   }) : errorValue = value == null ? "Kunde inte hämta" : "",
        value = value ?? 0;
 

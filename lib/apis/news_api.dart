@@ -13,6 +13,7 @@ class NewsApi {
       'source-country': 'se',
       'language': 'sv',
       'text': 'bostadsmarknad OR fastigheter OR hyra',
+      'sort-direction': 'DESC',
     };
 
     final uri = Uri.parse(_baseUrl).replace(queryParameters: queryParams);
