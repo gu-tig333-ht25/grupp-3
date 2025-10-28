@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:template/apis/pristrend_api.dart';
 import 'package:template/models/saved_search.dart';
 
 class FavouritesProvider with ChangeNotifier {
@@ -11,7 +12,10 @@ class FavouritesProvider with ChangeNotifier {
 
   List<SavedSearch> get favoriter => _favoriter;
 
+  final PristrendApi pristrendApi = PristrendApi();
+
   FavouritesProvider() {
+    pristrendApi.init();
     _init();
   }
 
@@ -27,6 +31,10 @@ class FavouritesProvider with ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+
+  Future<double> getTrendForRegion(String region) async {
+    return await pristrendApi.fetchTrendForRegion(selectedRegionCode: region);
   }
 
   void addFavourite(SavedSearch favourite) async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_main.dart';
 import 'package:template/screens/pristrend_screen/pristrend_state.dart';
@@ -20,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final rantaProvider = context.watch<RantaState>();
     final pristrendProvider = context.watch<ChartProvider>();
+
+    FlutterNativeSplash.remove();
 
     return Scaffold(
       appBar: AppBar(

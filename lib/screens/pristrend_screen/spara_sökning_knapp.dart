@@ -29,7 +29,6 @@ class SaveSearchButton extends StatelessWidget {
                 SavedSearch savedSearch = SavedSearch(
                   selectedRegionCode: pristrendProvider.selectedRegionCode!,
                   selectedRegionName: pristrendProvider.selectedRegionName!,
-                  selectedQuarter: pristrendProvider.selectedQuarter!,
                 );
                 favouritesProvider.addFavourite(savedSearch);
               }

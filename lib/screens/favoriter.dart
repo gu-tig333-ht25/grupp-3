@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/providers/favourites_provider.dart';
 import 'package:template/providers/theme_provider.dart';
-import 'package:template/screens/pristrend_screen/pristrend_state.dart'
-    show ChartProvider;
 import 'package:template/screens/profil.dart';
 import 'package:template/widgets/navigation_bar.dart';
 
@@ -14,7 +12,7 @@ class Favoriter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favouritesProvider = context.watch<FavouritesProvider>();
-    final pristrendProvider = context.watch<ChartProvider>();
+
     final user = FirebaseAuth.instance.currentUser;
 
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -46,7 +44,7 @@ class Favoriter extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "12 mån",
+                        "Senaste året",
                         style: Theme.of(context).textTheme.headlineSmall!,
                         //.copyWith(fontSize: 15),
                       ),
@@ -54,7 +52,6 @@ class Favoriter extends StatelessWidget {
                   ],
                 ),
                 ...favouritesProvider.favoriter.map((favourite) {
-                  double? trend = pristrendProvider.pristrend;
                   return TableRow(
                     children: [
                       Center(
@@ -112,10 +109,32 @@ class Favoriter extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: trend == null
-                            ? Text("Laddar")
-                            : Text(
-                                "${trend <= 0 ? "" : " "} ${trend.toStringAsFixed(2)}%",
+                        child: FutureBuilder<double>(
+                          future: favouritesProvider.getTrendForRegion(
+                            favourite.selectedRegionCode,
+                          ),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text(
+                                "Fel",
+                                style: Theme.of(context).textTheme.bodyLarge!
+                                    .copyWith(color: Colors.redAccent),
+                              );
+                            } else {
+                              final trend = snapshot.data ?? 0.0;
+                              return Text(
+                                "${trend <= 0 ? "" : "+"}${trend.toStringAsFixed(2)}%",
                                 style: Theme.of(context).textTheme.bodyLarge!
                                     .copyWith(
                                       color: trend <= 0
@@ -132,7 +151,10 @@ class Favoriter extends StatelessWidget {
                                               71,
                                             ),
                                     ),
-                              ),
+                              );
+                            }
+                          },
+                        ),
                       ),
                     ],
                   );
