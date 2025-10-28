@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'package:template/models/saved_search.dart';
 import 'package:template/providers/favourites_provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_state.dart'
     show ChartProvider;
+import 'package:template/screens/profil.dart';
 
 class SaveSearchButton extends StatelessWidget {
   const SaveSearchButton({super.key});
@@ -33,12 +33,18 @@ class SaveSearchButton extends StatelessWidget {
                 );
                 favouritesProvider.addFavourite(savedSearch);
               }
-            // onPressed = null disables the button
-            : null,
+            : () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => ProfilScreen(),
+                  ),
+                ),
+              },
         child: user != null
             ? const Text("Spara sökning", style: TextStyle(color: Colors.white))
             : const Text(
-                "Logga in för att spara sökning",
+                "Logga in för att kunna spara sökning",
                 style: TextStyle(color: Colors.white),
               ),
       ),
