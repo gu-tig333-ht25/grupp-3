@@ -38,9 +38,12 @@ class PristrendGraf extends StatelessWidget {
                     if (index == 0 ||
                         index == labels.length - 1 ||
                         index % 5 == 0) {
-                      return Text(
-                        labels[index],
-                        style: const TextStyle(fontSize: 10),
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          labels[index],
+                          style: const TextStyle(fontSize: 10),
+                        ),
                       );
                     } else {
                       return const SizedBox.shrink();
@@ -101,7 +104,24 @@ class PristrendGraf extends StatelessWidget {
                 barWidth: 3,
                 isStrokeCapRound: true,
                 dotData: const FlDotData(show: true),
-                belowBarData: BarAreaData(show: true),
+                belowBarData: BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.primary.withAlpha(80),
+                      Theme.of(context).colorScheme.primary.withAlpha(80),
+                    ],
+                  ),
+                ),
+                aboveBarData: BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.primary.withAlpha(40),
+                      Theme.of(context).colorScheme.primary.withAlpha(40),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
