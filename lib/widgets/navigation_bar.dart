@@ -15,7 +15,7 @@ class Navbar extends StatelessWidget {
     return NavigationBar(
       onDestinationSelected: (int index) {
         if (index == _currentPageIndex && _showSelected) {
-          return; // Byta inte till sidan  vi redan är på
+          return; // Byta inte till sidan vi redan är på
         }
         switch (index) {
           case 0: // Home Screen

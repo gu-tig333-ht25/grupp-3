@@ -34,9 +34,9 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
       ),
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
-        onProgressChanged: (controller, value) {
+        onProgressChanged: (controller, percentLoaded) {
           setState(() {
-            progress = value / 100;
+            progress = percentLoaded / 100;
           });
         },
       ),

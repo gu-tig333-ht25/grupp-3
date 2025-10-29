@@ -9,14 +9,9 @@ import 'package:template/widgets/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';
 import 'package:template/widgets/news_card.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final rantaProvider = context.watch<RantaState>();
@@ -37,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 52,
                   height: 52,
                 ),
-                // applicationName: "Bostadskollen",
               ),
             },
             icon: Icon(Icons.info_outlined),
@@ -46,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
+          children: [
             Padding(padding: const EdgeInsets.all(16.0)),
             Padding(
               padding: const EdgeInsets.all(16.0),

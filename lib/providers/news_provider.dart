@@ -26,8 +26,8 @@ class NewsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final fresh = await _newsApi.fetchSwedishHousingNews();
-      _articles = fresh;
+      final freshArticles = await _newsApi.fetchSwedishHousingNews();
+      _articles = freshArticles;
       _lastFetchTime = DateTime.now();
     } catch (e) {
       debugPrint('ERROR fetching news: $e');

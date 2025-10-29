@@ -12,10 +12,10 @@ class FavouritesProvider with ChangeNotifier {
 
   List<SavedSearch> get favoriter => _favoriter;
 
-  final PristrendApi pristrendApi = PristrendApi();
+  final PristrendApi _pristrendApi = PristrendApi();
 
   FavouritesProvider() {
-    pristrendApi.init();
+    _pristrendApi.init();
     _init();
   }
 
@@ -34,7 +34,7 @@ class FavouritesProvider with ChangeNotifier {
   }
 
   Future<double> getTrendForRegion(String region) async {
-    return await pristrendApi.fetchTrendForRegion(selectedRegionCode: region);
+    return await _pristrendApi.fetchTrendForRegion(selectedRegionCode: region);
   }
 
   void addFavourite(SavedSearch favourite) async {
