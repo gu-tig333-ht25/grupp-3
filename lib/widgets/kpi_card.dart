@@ -49,7 +49,7 @@ class KpiCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.displaySmall!
                             .copyWith(
                               color: value <= 0
-                                  ? const Color.fromARGB(255, 138, 24, 24)
+                                  ? const Color.fromARGB(255, 200, 0, 0)
                                   : const Color.fromARGB(255, 68, 155, 71),
                             ),
                         textAlign: TextAlign.center,
@@ -58,7 +58,7 @@ class KpiCard extends StatelessWidget {
                         errorValue,
                         style: Theme.of(context).textTheme.displaySmall!
                             .copyWith(
-                              color: const Color.fromARGB(255, 138, 24, 24),
+                              color: const Color.fromARGB(255, 200, 0, 0),
                             ),
                       ),
               ],
