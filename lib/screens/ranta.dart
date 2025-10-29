@@ -18,7 +18,7 @@ class RantaScreen extends StatelessWidget {
         ).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600);
 
         return Scaffold(
-          appBar: AppBar(title: const Text("Ränta")),
+          appBar: AppBar(title: const Text("Ränta"), centerTitle: true),
           body: SafeArea(
             child: s.loading
                 ? const Center(child: CircularProgressIndicator())

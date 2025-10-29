@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF597FD0),
+          backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
           elevation: 0,
         ),
@@ -59,14 +59,16 @@ class MyApp extends StatelessWidget {
           headlineMedium: TextStyle(color: Colors.black),
           bodyMedium: TextStyle(color: Colors.black),
         ),
+        cardColor: Colors.teal.shade50,
       ),
       darkTheme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.indigoAccent,
           brightness: Brightness.dark,
         ),
+        cardColor: Colors.grey.shade800,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF597FD0),
+          backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
         ),
         textTheme: const TextTheme(

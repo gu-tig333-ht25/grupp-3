@@ -20,7 +20,7 @@ class KpiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = Theme.of(context).colorScheme.surfaceContainerHighest;
+    final cardColor = Theme.of(context).cardColor;
     return MaterialButton(
       onPressed: onPressed,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
