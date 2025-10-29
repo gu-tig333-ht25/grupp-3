@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart' show FlSpot;
 import 'package:http/http.dart' as http;
 
@@ -32,10 +32,10 @@ class PristrendApi {
         );
         _tidsperioder = List<String>.from(tidVar["values"]);
       } else {
-        print("Fel vid hämtning av kvartal: ${response.statusCode}");
+        debugPrint("Fel vid hämtning av kvartal: ${response.statusCode}");
       }
     } catch (e) {
-      print("Fel vid hämtning av kvartal: $e");
+      debugPrint("Fel vid hämtning av kvartal: $e");
     }
   }
 
@@ -115,7 +115,7 @@ class PristrendApi {
         return pristrend;
       }
     } catch (e) {
-      print("Fel vid hämtning av grafdata: $e");
+      debugPrint("Fel vid hämtning av grafdata: $e");
     }
     return -99.9;
   }
