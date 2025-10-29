@@ -30,6 +30,15 @@ class SaveSearchButton extends StatelessWidget {
                   selectedRegionName: pristrendProvider.selectedRegionName!,
                 );
                 favouritesProvider.addFavourite(savedSearch);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      '${pristrendProvider.selectedRegionName} har sparats till favoriter.',
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
               }
             : () => {
                 Navigator.push(
