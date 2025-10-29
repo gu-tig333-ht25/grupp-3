@@ -12,7 +12,10 @@ class ChartProvider extends ChangeNotifier {
   List<String> tidsperioder = [];
 
   // Grafdata
-  List<FlSpot> spots = [];
+  List<FlSpot> spots = []; // tkr och kvartal för spots i graf
+
+  List<String> latest10 =
+      []; // använder inte denna ta bort kommentar om vi faktiskt använder den senare
 
   // Val
   String? selectedRegionCode;
@@ -81,10 +84,10 @@ class ChartProvider extends ChangeNotifier {
           (i) => {"code": codes[i], "name": names[i]},
         );
       } else {
-        print("Fel vid hämtning av regioner: ${response.statusCode}");
+        debugPrint("Fel vid hämtning av regioner: ${response.statusCode}");
       }
     } catch (e) {
-      print("Fel vid hämtning av regioner: $e");
+      debugPrint("Fel vid hämtning av regioner: $e");
     }
 
     isLoadingRegions = false;
@@ -107,10 +110,10 @@ class ChartProvider extends ChangeNotifier {
         );
         tidsperioder = List<String>.from(tidVar["values"]);
       } else {
-        print("Fel vid hämtning av kvartal: ${response.statusCode}");
+        debugPrint("Fel vid hämtning av kvartal: ${response.statusCode}");
       }
     } catch (e) {
-      print("Fel vid hämtning av kvartal: $e");
+      debugPrint("Fel vid hämtning av kvartal: $e");
     }
 
     selectedQuarter ??= tidsperioder.isNotEmpty ? tidsperioder.last : null;
@@ -162,15 +165,9 @@ class ChartProvider extends ChangeNotifier {
 
     try {
       // Hämta de 10 senaste kvartalen (failsafe om färre finns)
-      int index = tidsperioder.indexOf(selectedQuarter ?? tidsperioder.last);
-      int start = index - 9 < 0 ? 0 : index - 9;
-
-      if (fetchKPI) {
-        index = tidsperioder.indexOf(tidsperioder.last);
-        start = index - 3 < 0 ? 0 : index - 3;
-      }
-
-      final latest10 = tidsperioder.sublist(start, index + 1);
+      final index = tidsperioder.indexOf(selectedQuarter ?? tidsperioder.last);
+      final start = index - 9 < 0 ? 0 : index - 9;
+      latest10 = tidsperioder.sublist(start, index + 1);
 
       final url = Uri.parse(
         "https://corsproxy.io/?https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BO/BO0501/BO0501B/FastprisPSRegKv",
@@ -211,29 +208,40 @@ class ChartProvider extends ChangeNotifier {
         final values = data["data"] as List<dynamic>;
 
         // Skapa grafpunkter
-        if (!fetchKPI) {
-          spots = [];
-          for (int i = 0; i < values.length; i++) {
-            final raw = values[i]["values"][0];
-            final y = double.tryParse(raw) ?? 0.0;
-            spots.add(FlSpot(i.toDouble(), y));
-          }
-        } else {
-          List<FlSpot> tempList = [];
-          for (int i = 0; i < values.length; i++) {
-            final raw = values[i]["values"][0];
-            final y = double.tryParse(raw) ?? 0.0;
-            tempList.add(FlSpot(i.toDouble(), y));
-          }
-          _pristrend = ((tempList.last.y / tempList.first.y) - 1) * 100;
+        spots = [];
+
+        for (int i = 0; i < values.length; i++) {
+          final raw = values[i]["values"][0];
+          final y = double.tryParse(raw) ?? 0.0;
+          spots.add(FlSpot(i.toDouble(), y));
         }
       }
     } catch (e) {
-      print("Fel vid hämtning av grafdata: $e");
+      debugPrint("Fel vid hämtning av grafdata: $e");
       spots = [];
     }
 
     isLoading = false;
     notifyListeners();
+  }
+
+  /// Förändring mellan första och sista värdet i grafen (i procent)
+  double get totalChangePercent {
+    if (spots.length < 2) return 0.0;
+    final first = spots.first.y;
+    final last = spots.last.y;
+    if (first == 0) return 0.0;
+    final percent = ((last - first) / first) * 100;
+    return double.parse(percent.toStringAsFixed(2));
+  }
+
+  /// Förändring mellan de två senaste kvartalen (i procent)
+  double get latestQuarterChangePercent {
+    if (spots.length < 2) return 0.0;
+    final prev = spots[spots.length - 2].y;
+    final last = spots.last.y;
+    if (prev == 0) return 0.0;
+    final percent = ((last - prev) / prev) * 100;
+    return double.parse(percent.toStringAsFixed(2));
   }
 }
