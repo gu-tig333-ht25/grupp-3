@@ -138,12 +138,7 @@ class Favoriter extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodyLarge!
                                     .copyWith(
                                       color: trend <= 0
-                                          ? const Color.fromARGB(
-                                              255,
-                                              138,
-                                              24,
-                                              24,
-                                            )
+                                          ? const Color.fromARGB(255, 200, 0, 0)
                                           : const Color.fromARGB(
                                               255,
                                               68,
