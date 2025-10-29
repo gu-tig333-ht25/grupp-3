@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:template/widgets/navigation_bar.dart';
 import 'pristrend_state.dart';
 import 'pristrend_graf.dart';
 import 'spara_sokning_knapp.dart';
@@ -106,13 +107,8 @@ class PristrendScreen extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ""),
-        ],
-      ),
+
+      bottomNavigationBar: Navbar(currentPageIndex: 0, showSelected: false),
     );
   }
 }

@@ -26,9 +26,12 @@ class NewsCard extends StatelessWidget {
     }
 
     if (newsProvider.articles.isEmpty) {
-      return const Padding(
+      return Padding(
         padding: EdgeInsets.all(16.0),
-        child: Text('Inga nyheter tillgängliga'),
+        child: Text(
+          'Inga nyheter tillgängliga',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
       );
     }
 

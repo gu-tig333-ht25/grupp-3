@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:template/screens/pristrend_screen/pristrend_main.dart';
+import 'package:template/screens/pristrend_screen/pristrend_state.dart';
 import 'package:template/screens/ranta.dart';
+import 'package:template/state/ranta_state.dart';
 import 'package:template/widgets/hem/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';
 import 'package:template/widgets/news/news_card.dart';
@@ -15,15 +18,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentPageIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+    final rantaProvider = context.watch<RantaState>();
+    final pristrendProvider = context.watch<ChartProvider>();
+
+    FlutterNativeSplash.remove();
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Bostadskollen'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => {
+              showLicensePage(
+                context: context,
+                applicationIcon: Image.asset(
+                  'assets/icons/app_icon.png',
+                  width: 52,
+                  height: 52,
+                ),
+                // applicationName: "Bostadskollen",
+              ),
+            },
+            icon: Icon(Icons.info_outlined),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -41,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 },
                 title: "Styrränta",
-                value: 1.75,
+                value: rantaProvider.current,
+                loading: rantaProvider.loading,
               ),
             ),
             Padding(
@@ -63,31 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   );
                 },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () => {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF597FD0),
-                  foregroundColor: Colors.white, // Text color
-                  padding: const EdgeInsets.all(8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    "Bolånekalkyl",
-                    style: Theme.of(
-                      context,
-                    ).textTheme.headlineSmall!.copyWith(color: Colors.white),
-                  ),
-                ),
-
-                // textColor: Colors.white,
-                // color: Colors.blue,
               ),
             ),
 

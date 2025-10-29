@@ -13,7 +13,6 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
-  // Helper-funktion för att returnera korrekt ImageProvider
   ImageProvider getProfileImage(String? photoUrl) {
     if (photoUrl != null && photoUrl.startsWith('http')) {
       return NetworkImage(photoUrl);
@@ -26,6 +25,9 @@ class _ProfilScreenState extends State<ProfilScreen> {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDarkMode;
+
+    final borderColor = isDark ? Colors.grey[700]! : Colors.grey[400]!;
 
     return Scaffold(
       appBar: AppBar(
@@ -49,29 +51,32 @@ class _ProfilScreenState extends State<ProfilScreen> {
               ),
               const SizedBox(height: 30),
             ],
-
-            // Mörkt läge växling
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("Mörkt läge", style: TextStyle(fontSize: 16)),
-                Switch(
-                  value: themeProvider.isDarkMode,
-                  onChanged: (value) {
-                    themeProvider.toggleTheme(value);
-                  },
-                ),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: borderColor, width: 1.3),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Mörkt läge", style: TextStyle(fontSize: 16)),
+                  Switch(
+                    value: themeProvider.isDarkMode,
+                    onChanged: (value) {
+                      themeProvider.toggleTheme(value);
+                    },
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 40),
-
-            // Logga in / Logga ut knapp
-            ElevatedButton(
+            OutlinedButton(
               onPressed: () async {
                 if (user != null) {
                   await FirebaseAuth.instance.signOut();
                   if (!mounted) return;
-                  setState(() {}); // uppdatera vyn
+                  setState(() {});
                 } else {
                   if (!mounted) return;
                   Navigator.push(
@@ -80,18 +85,21 @@ class _ProfilScreenState extends State<ProfilScreen> {
                   );
                 }
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFF3F1FC),
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: borderColor, width: 1.3),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                backgroundColor: isDark
+                    ? const Color(0xFF1E1E1E)
+                    : const Color(0xFFF8F8F8),
               ),
               child: Text(
                 user != null ? "Logga ut" : "Logga in",
-                style: const TextStyle(
-                  color: Color(0xFF444444),
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w600,
                 ),
               ),

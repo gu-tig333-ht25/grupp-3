@@ -13,6 +13,10 @@ class NewsProvider with ChangeNotifier {
   List<NewsArticle> get articles => _articles;
   bool get isLoading => _isLoading;
 
+  NewsProvider() {
+    loadNews();
+  }
+
   Future<void> loadNews({bool forceRefresh = false}) async {
     if (!forceRefresh && _isCacheValid) {
       return;
