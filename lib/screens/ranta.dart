@@ -234,9 +234,9 @@ LineChartData _chartData(BuildContext context, RantaState s) {
           reservedSize: 44,
           getTitlesWidget: (v, meta) => Text(
             v.toStringAsFixed(2).replaceAll('.', ','),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
-              color: Colors.black54,
+              color: Theme.of(context).colorScheme.primary.withAlpha(80),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -250,9 +250,9 @@ LineChartData _chartData(BuildContext context, RantaState s) {
             padding: const EdgeInsets.only(top: 6),
             child: Text(
               bottomLabel(v),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11,
-                color: Colors.black54,
+                color: Theme.of(context).colorScheme.primary.withAlpha(80),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -262,6 +262,7 @@ LineChartData _chartData(BuildContext context, RantaState s) {
       rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
     ),
+
     borderData: FlBorderData(show: false),
     lineBarsData: [
       LineChartBarData(
