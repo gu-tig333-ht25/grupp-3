@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/models/saved_search.dart';
 import 'package:template/providers/favourites_provider.dart';
-import 'package:template/screens/pristrend_screen/pristrend_state.dart'
-    show ChartProvider;
+import 'package:template/providers/pristrend_state.dart' show ChartProvider;
 import 'package:template/screens/profil.dart';
 
 class SaveSearchButton extends StatelessWidget {

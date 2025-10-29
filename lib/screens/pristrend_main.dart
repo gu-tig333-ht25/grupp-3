@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/widgets/navigation_bar.dart';
-import 'pristrend_state.dart';
-import 'pristrend_graf.dart';
-import 'spara_sokning_knapp.dart';
-import 'package:template/widgets/hem/kpi_card.dart';
+import '../providers/pristrend_state.dart';
+import '../widgets/pristrend_graf.dart';
+import '../widgets/spara_sokning_knapp.dart';
+import 'package:template/widgets/kpi_card.dart';
 
 class PristrendScreen extends StatelessWidget {
   const PristrendScreen({super.key});
