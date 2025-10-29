@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:template/widgets/navigation_bar.dart';
+import 'package:template/widgets/kpi_card.dart';
 
 import '../providers/ranta_state.dart';
 
@@ -44,8 +45,6 @@ class RantaScreen extends StatelessWidget {
                               ?.copyWith(color: Colors.grey[600]),
                         ),
                         const SizedBox(height: 16),
-
-                        // Graf
                         Container(
                           height: 220,
                           decoration: BoxDecoration(
@@ -62,11 +61,9 @@ class RantaScreen extends StatelessWidget {
                         ),
 
                         const SizedBox(height: 12),
-
-                        // Kalender + dropdowns
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Kalenderikon (ikon-only)
                             Padding(
                               padding: const EdgeInsets.only(
                                 right: 8.0,
@@ -95,15 +92,15 @@ class RantaScreen extends StatelessWidget {
                                   ).colorScheme.onSurface,
                                   padding: const EdgeInsets.all(10),
                                   constraints: const BoxConstraints(
-                                    minWidth: 40,
-                                    minHeight: 40,
+                                    minWidth: 45,
+                                    minHeight: 45,
                                   ),
                                 ),
                               ),
                             ),
 
-                            // Timespan
                             Expanded(
+                              flex: 4,
                               child: _RangeDropdown(
                                 label: "Timespan",
                                 values: const [
@@ -122,9 +119,8 @@ class RantaScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 12),
-
-                            // Show (aggregation)
                             Expanded(
+                              flex: 6,
                               child: _RangeDropdown(
                                 label: "Show",
                                 values: const [
@@ -140,6 +136,34 @@ class RantaScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 16),
+                        Column(
+                          children: [
+                            KpiCard(
+                              title: "Förändring senaste månaden",
+                              value: s.change1mRaw != null
+                                  ? double.parse(
+                                      s.change1mRaw!.toStringAsFixed(2),
+                                    )
+                                  : 0,
+                              loading: s.loading,
+                              onPressed: () {},
+                              showArrow: false,
+                            ),
+                            const SizedBox(height: 16),
+                            KpiCard(
+                              title: "Förändring 12 månader",
+                              value: s.change1yRaw != null
+                                  ? double.parse(
+                                      s.change1yRaw!.toStringAsFixed(2),
+                                    )
+                                  : 0,
+                              loading: s.loading,
+                              onPressed: () {},
+                              showArrow: false,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -151,16 +175,15 @@ class RantaScreen extends StatelessWidget {
   }
 }
 
-// ---- fl_chart config ----
 LineChartData _chartData(BuildContext context, RantaState s) {
   final spots = <FlSpot>[];
   for (var i = 0; i < s.view.length; i++) {
-    spots.add(FlSpot(i.toDouble(), s.view[i].value));
+    final raw = s.view[i].value;
+    final rounded = double.parse(raw.toStringAsFixed(2));
+    spots.add(FlSpot(i.toDouble(), rounded));
   }
 
-  // lite luft så första/sista etikett inte kapas
   final lastIndex = s.view.isEmpty ? 0 : s.view.length - 1;
-
   final labelFmtShort = DateFormat('MM/yy');
   final labelFmtLong = DateFormat('yyyy');
 
@@ -183,7 +206,7 @@ LineChartData _chartData(BuildContext context, RantaState s) {
           showTitles: true,
           reservedSize: 44,
           getTitlesWidget: (v, meta) => Text(
-            v.toStringAsFixed(1).replaceAll('.', ','),
+            v.toStringAsFixed(2).replaceAll('.', ','),
             style: const TextStyle(
               fontSize: 11,
               color: Colors.white70,
@@ -225,14 +248,12 @@ LineChartData _chartData(BuildContext context, RantaState s) {
   );
 }
 
-// dynamisk etikettintervall
 double _xInterval(int len) {
   if (len <= 6) return 1;
   if (len <= 24) return 3;
   return 12;
 }
 
-// --- Små UI-komponenter (oförändrad) ---
 class _RangeDropdown extends StatelessWidget {
   final String label;
   final List<String> values;
@@ -286,11 +307,11 @@ class _RangeDropdown extends StatelessWidget {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.black),
+              borderSide: const BorderSide(color: Colors.black),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.black),
+              borderSide: const BorderSide(color: Colors.black),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
