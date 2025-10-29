@@ -48,7 +48,6 @@ class RantaScreen extends StatelessWidget {
                         Container(
                           height: 220,
                           decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 8, 39, 59),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.symmetric(
@@ -199,6 +198,34 @@ LineChartData _chartData(BuildContext context, RantaState s) {
   return LineChartData(
     minX: -0.5,
     maxX: lastIndex + 0.5,
+
+    // 👇👇 NY DEL: tooltip / press-rutan
+    lineTouchData: LineTouchData(
+      enabled: true,
+      touchTooltipData: LineTouchTooltipData(
+        tooltipBgColor: const Color.fromARGB(255, 8, 39, 59), // <-- bakgrund
+        tooltipRoundedRadius: 8,
+        fitInsideHorizontally: true,
+        fitInsideVertically: true,
+        getTooltipItems: (touchedSpots) {
+          return touchedSpots.map((barSpot) {
+            final yVal = barSpot.y
+                .toStringAsFixed(2)
+                .replaceAll('.', ','); // "1,75"
+            return LineTooltipItem(
+              "$yVal %",
+              const TextStyle(
+                color: Colors.white, // textfärg i rutan
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          }).toList();
+        },
+      ),
+    ),
+
+    // ☝️☝️ SLUT NY DEL
     gridData: FlGridData(show: true, drawVerticalLine: false),
     titlesData: FlTitlesData(
       leftTitles: AxisTitles(
@@ -209,7 +236,7 @@ LineChartData _chartData(BuildContext context, RantaState s) {
             v.toStringAsFixed(2).replaceAll('.', ','),
             style: const TextStyle(
               fontSize: 11,
-              color: Colors.white70,
+              color: Colors.black54,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -225,7 +252,7 @@ LineChartData _chartData(BuildContext context, RantaState s) {
               bottomLabel(v),
               style: const TextStyle(
                 fontSize: 11,
-                color: Colors.white70,
+                color: Colors.black54,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -241,8 +268,17 @@ LineChartData _chartData(BuildContext context, RantaState s) {
         spots: spots,
         isCurved: false,
         barWidth: 2,
-        color: Colors.greenAccent,
+        color: Colors.teal,
         dotData: const FlDotData(show: false),
+        belowBarData: BarAreaData(
+          show: true,
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).colorScheme.primary.withAlpha(80),
+              Theme.of(context).colorScheme.primary.withAlpha(80),
+            ],
+          ),
+        ),
       ),
     ],
   );
