@@ -9,8 +9,8 @@ import 'package:template/providers/theme_provider.dart';
 import 'package:template/providers/news_provider.dart';
 import 'package:template/screens/home.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:template/screens/pristrend_screen/pristrend_state.dart';
-import 'package:template/state/ranta_state.dart';
+import 'package:template/providers/pristrend_state.dart';
+import 'package:template/providers/ranta_state.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

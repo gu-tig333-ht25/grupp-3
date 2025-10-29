@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:template/widgets/navigation_bar.dart';
 
-import '../state/ranta_state.dart';
+import '../providers/ranta_state.dart';
 
 class RantaScreen extends StatelessWidget {
   const RantaScreen({super.key});

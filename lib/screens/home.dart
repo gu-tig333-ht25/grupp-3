@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
-import 'package:template/screens/pristrend_screen/pristrend_main.dart';
-import 'package:template/screens/pristrend_screen/pristrend_state.dart';
+import 'package:template/screens/pristrend_main.dart';
+import 'package:template/providers/pristrend_state.dart';
 import 'package:template/screens/ranta.dart';
-import 'package:template/state/ranta_state.dart';
-import 'package:template/widgets/hem/kpi_card.dart';
+import 'package:template/providers/ranta_state.dart';
+import 'package:template/widgets/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';
-import 'package:template/widgets/news/news_card.dart';
-import 'package:template/screens/pristrend_screen/pristrend_state.dart';
+import 'package:template/widgets/news_card.dart';
+import 'package:template/providers/pristrend_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
