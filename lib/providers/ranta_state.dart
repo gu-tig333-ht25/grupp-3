@@ -189,4 +189,40 @@ class RantaState extends ChangeNotifier {
     final f = DateFormat('yyyy-MM-dd');
     return '${f.format(customFrom!)} – ${f.format(customTo!)}';
   }
+  // -----------------------------------------------------------
+  // Förändring i procentenheter (senaste månaden och senaste året)
+  // -----------------------------------------------------------
+
+  RatePoint? _pointApproxDaysBack(int daysBack) {
+    if (view.length < 2) return null;
+    final nowPoint = view.last;
+    final cutoff = nowPoint.date.subtract(Duration(days: daysBack));
+
+    // Ta senaste punkt som inte är efter cutoff
+    for (final p in view.reversed) {
+      if (!p.date.isAfter(cutoff)) {
+        return p;
+      }
+    }
+    // Om vi inte hittar någon så gammal punkt, ta äldsta
+    return view.first;
+  }
+
+  // Förändring i procentenheter senaste ~30 dagar
+  double? get change1mRaw {
+    final thenPoint = _pointApproxDaysBack(30);
+    if (thenPoint == null || view.isEmpty) return null;
+    final nowVal = view.last.value;
+    final thenVal = thenPoint.value;
+    return nowVal - thenVal; // Ex: +2.0 betyder +2 %-enheter
+  }
+
+  // Förändring i procentenheter senaste ~365 dagar
+  double? get change1yRaw {
+    final thenPoint = _pointApproxDaysBack(365);
+    if (thenPoint == null || view.isEmpty) return null;
+    final nowVal = view.last.value;
+    final thenVal = thenPoint.value;
+    return nowVal - thenVal;
+  }
 }
