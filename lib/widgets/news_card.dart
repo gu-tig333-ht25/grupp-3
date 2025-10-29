@@ -58,7 +58,7 @@ class NewsCard extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (_) => InAppBrowserScreen(
                         url: article.url!,
-                        title: article.sourceName ?? article.title ?? 'Nyheter',
+                        title: article.sourceName ?? article.title,
                       ),
                     ),
                   );

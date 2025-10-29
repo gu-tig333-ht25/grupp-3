@@ -8,7 +8,6 @@ import 'package:template/providers/ranta_state.dart';
 import 'package:template/widgets/kpi_card.dart';
 import 'package:template/widgets/navigation_bar.dart';
 import 'package:template/widgets/news_card.dart';
-import 'package:template/providers/pristrend_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final rantaProvider = context.watch<RantaState>();
-    final pristrendProvider = context.watch<ChartProvider>();
 
     FlutterNativeSplash.remove();
 

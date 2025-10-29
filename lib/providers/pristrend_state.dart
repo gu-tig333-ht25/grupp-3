@@ -22,18 +22,11 @@ class ChartProvider extends ChangeNotifier {
   String? selectedRegionName;
   String? selectedQuarter;
 
-  // Pristrend
-  double? _pristrend;
-
   List<String> get latest10Quarters {
     if (selectedQuarter == null || tidsperioder.isEmpty) return [];
     final index = tidsperioder.indexOf(selectedQuarter!);
     final start = index - 9 < 0 ? 0 : index - 9;
     return tidsperioder.sublist(start, index + 1);
-  }
-
-  double? get pristrend {
-    return _pristrend;
   }
 
   bool isLoading = false;
@@ -54,7 +47,6 @@ class ChartProvider extends ChangeNotifier {
       )["name"];
       selectedQuarter ??= tidsperioder.last;
 
-      await fetchChartData(fetchKPI: true);
       await fetchChartData();
     }
   }
@@ -140,15 +132,13 @@ class ChartProvider extends ChangeNotifier {
   }
 
   // Hämtar grafdata baserat på vald region och kvartal
-  Future<void> fetchChartData({bool fetchKPI = false}) async {
+  Future<void> fetchChartData() async {
+    if (selectedRegionCode == null || tidsperioder.isEmpty) {
+      return;
+    }
+
     // Län
     String filter = "vs:RegionLän99EjAggr";
-
-    if (!fetchKPI) {
-      if (selectedRegionCode == null || tidsperioder.isEmpty) {
-        return;
-      }
-    }
 
     // Riksområde
     if (selectedRegionCode!.startsWith("00") ||
@@ -156,7 +146,7 @@ class ChartProvider extends ChangeNotifier {
       filter = "vs:Region99Riks11v";
     }
     //Riket
-    if (selectedRegionCode!.compareTo("00") == 0 || fetchKPI) {
+    if (selectedRegionCode!.compareTo("00") == 0) {
       filter = "vs:RegionRiket99";
     }
 
@@ -179,7 +169,7 @@ class ChartProvider extends ChangeNotifier {
             "code": "Region",
             "selection": {
               "filter": filter,
-              "values": [fetchKPI ? "00" : selectedRegionCode],
+              "values": [selectedRegionCode],
             },
           },
           {

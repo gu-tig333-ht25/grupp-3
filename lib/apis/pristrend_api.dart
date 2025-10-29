@@ -4,9 +4,6 @@ import 'package:fl_chart/fl_chart.dart' show FlSpot;
 import 'package:http/http.dart' as http;
 
 class PristrendApi {
-  // Regioner
-  List<Map<String, String>> _regions = [];
-
   // Kvartal
   List<String> _tidsperioder = [];
 

@@ -12,7 +12,6 @@ class InAppBrowserScreen extends StatefulWidget {
 }
 
 class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
-  late InAppWebViewController _webViewController;
   double progress = 0;
 
   @override
@@ -35,9 +34,6 @@ class _InAppBrowserScreenState extends State<InAppBrowserScreen> {
       ),
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
-        onWebViewCreated: (controller) {
-          _webViewController = controller;
-        },
         onProgressChanged: (controller, value) {
           setState(() {
             progress = value / 100;
