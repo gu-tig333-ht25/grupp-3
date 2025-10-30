@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:template/apis/news_api.dart';
+import 'package:template/data/news_api.dart';
 import 'package:template/models/news_article.dart';
 
 class NewsProvider with ChangeNotifier {
