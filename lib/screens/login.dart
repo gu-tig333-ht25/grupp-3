@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart' show NetworkAssetBundle;
+import 'package:provider/provider.dart';
+import 'package:template/providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,91 +14,93 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _loading = false;
   String? _error;
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   Future<void> _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() => _error = "Fyll i både e-post och lösenord.");
+      return;
+    }
+
     setState(() {
       _loading = true;
       _error = null;
     });
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      final user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        const String onlineImage =
-            'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-
-        bool canLoadNetworkImage = false;
-
-        try {
-          // Testar om nätbilden går att ladda
-          final response =
-              await NetworkAssetBundle(Uri.parse(onlineImage)).load("");
-          canLoadNetworkImage = response.lengthInBytes > 0;
-        } catch (_) {
-          canLoadNetworkImage = false;
-        }
-
-        // Endast om photoURL saknas och nätbilden funkar
-        if ((user.photoURL == null || user.photoURL!.isEmpty) &&
-            canLoadNetworkImage) {
-          await user.updatePhotoURL(onlineImage);
-        }
-      }
-
+      await context.read<AuthProvider>().login(email, password);
       if (!mounted) return;
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _error = e.message;
-      });
+      Navigator.pop(context); // Go back to previous screen (profile updates automatically)
+    } catch (e) {
+      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     } finally {
-      setState(() {
-        _loading = false;
-      });
+      setState(() => _loading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(title: const Text('Logga in')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 40),
             const Text(
               'Logga in med testkonto',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
+
+            // Email
             TextField(
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                 labelText: 'E-post',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
+
+            // Password
             TextField(
               controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
+              obscureText: _obscurePassword,
+              decoration: InputDecoration(
                 labelText: 'Lösenord',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
               ),
             ),
+
             const SizedBox(height: 24),
             if (_error != null)
               Text(_error!, style: const TextStyle(color: Colors.red)),
             const SizedBox(height: 16),
+
             ElevatedButton(
               onPressed: _loading ? null : _login,
               style: ElevatedButton.styleFrom(
