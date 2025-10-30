@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
-import 'package:template/firebase_options.dart';
+import 'package:template/data/firebase_options.dart';
 import 'package:template/providers/favourites_provider.dart';
 import 'package:template/providers/theme_provider.dart';
 import 'package:template/providers/news_provider.dart';
