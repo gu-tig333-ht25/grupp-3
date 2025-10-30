@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:template/data/firebase_options.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:template/providers/pristrend_state.dart';
 import 'package:template/providers/ranta_state.dart';
 import 'package:template/providers/auth_provider.dart';
-import 'package:template/screens/login.dart';
 
 
 void main() async {
@@ -21,7 +19,6 @@ void main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  //await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   runApp(
     MultiProvider(
       providers: [
@@ -82,15 +79,7 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white),
         ),
       ),
-        home: Consumer<AuthProvider>(
-      builder: (context, auth, _) {
-        if (auth.user == null) {
-      return const LoginScreen();
-      } else {
-      return const HomeScreen();
-        }
-       },
-      ),
+    home: const HomeScreen(),
     );
   }
 }

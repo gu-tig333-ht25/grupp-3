@@ -50,7 +50,6 @@ class ProfilScreen extends StatelessWidget {
               const SizedBox(height: 30),
             ],
 
-            // Theme toggle
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: borderColor, width: 1.3),

@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await context.read<AuthProvider>().login(email, password);
       if (!mounted) return;
-      Navigator.pop(context); // Go back to previous screen (profile updates automatically)
+      Navigator.pop(context); 
     } catch (e) {
       setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     } finally {
@@ -64,7 +64,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Email
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
@@ -76,7 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Password
             TextField(
               controller: _passwordController,
               obscureText: _obscurePassword,
