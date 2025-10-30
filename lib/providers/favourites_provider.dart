@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:template/apis/pristrend_api.dart';
+import 'package:template/data/pristrend_api.dart';
 import 'package:template/models/saved_search.dart';
 
 class FavouritesProvider with ChangeNotifier {
